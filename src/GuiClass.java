@@ -6,7 +6,7 @@ import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
+//Test
 public class GuiClass {
     public void createMenu(ManagerClass manager) {
         //* Create blank window
