@@ -73,7 +73,6 @@ public class ManagerClass {
             } else if (var.matches("true") || var.matches("false")) {
                 constants.set(i, Boolean.parseBoolean(var));
             }
-
         }
 
         for (int i = 0; i < settings.size(); i++) {
@@ -216,6 +215,23 @@ public class ManagerClass {
         body.move(newPosition);
     }
 
+    public void checkCollisions(GenericBody body) {
+        //! Check collisions with other bodies
+        switch (body.getClass().getName()) {
+            case "SphereBody":
+                System.out.println("Is a sphere.");
+
+                break;
+            case "RectBody":
+                int[][] bounds = body.getBounds();
+                int size = body.getSize();
+
+                
+
+                break;
+        }
+    }
+
     private void updateAll(double elapsedTime) {
         for (GenericBody body : bodies) {
             //? If the body is static, skip it.
@@ -230,9 +246,11 @@ public class ManagerClass {
                 }
 
                 updatePosition(body, elapsedTime); //? Update the position of a body.
-
-                checkBounds(body); //? Confirm body is in bounds and fix if not.
             }
+
+            checkCollisions(body); //? Check if a body is colliding with another.
+
+            checkBounds(body); //? Confirm body is in bounds and fix if not.
         }
     }
 }
