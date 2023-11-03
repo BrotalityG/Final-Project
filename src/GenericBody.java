@@ -1,19 +1,23 @@
 public abstract class GenericBody {
-    protected double mass;
-    protected boolean canCollide;
-    protected boolean isStatic;
-
     public abstract void move(int[] position);
 
     public abstract int[] getPosition();
 
-    public abstract int[] getVelocity();
+    public abstract double[] getVelocity();
 
-    public abstract void shiftVelocity(int[] velocity);
-
-    public abstract void setVelocity(int[] velocity);
+    public abstract void setVelocity(double[] velocity);
 
     public abstract int[][] getBounds();
 
+    public abstract int[][] getEdgeBounds();
+
     public abstract int getSize();
+
+    public abstract double getElasticity();
+
+    public abstract double getMass();
+
+    public abstract boolean canCollide();
+
+    public abstract boolean isStatic();
 }

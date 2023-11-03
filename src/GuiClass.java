@@ -16,6 +16,7 @@ import javax.swing.text.JTextComponent;
 
 public class GuiClass {
     private GameFrame mainFrame;
+    private GamePanel panel;
     private Graphics g;
     private ManagerClass manager;
     private Insets insets;
@@ -25,10 +26,10 @@ public class GuiClass {
 
         //* Create blank window
         JFrame menu = new JFrame("2DPSE Menu");
-        JPanel panel = new JPanel();
-        panel.setOpaque(true);
-        panel.setLayout(null);
-        menu.setContentPane(panel);
+        JPanel panel1 = new JPanel();
+        panel1.setOpaque(true);
+        panel1.setLayout(null);
+        menu.setContentPane(panel1);
 
         menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -46,14 +47,14 @@ public class GuiClass {
         start.setAlignmentX(AbstractButton.CENTER);
         start.setAlignmentY(AbstractButton.CENTER);
         start.setBounds(Toolkit.getDefaultToolkit().getScreenSize().width/2, Toolkit.getDefaultToolkit().getScreenSize().height/2, Toolkit.getDefaultToolkit().getScreenSize().width/4, Toolkit.getDefaultToolkit().getScreenSize().height/8);
-        panel.add(start);
+        panel1.add(start);
         
         menu.setVisible(true);
     }
 
     public void createWindow() {
         mainFrame = new GameFrame(manager);
-        JPanel panel = new JPanel();
+        panel = new GamePanel(mainFrame);
         panel.setOpaque(true);
         panel.setLayout(null);
 
@@ -113,6 +114,16 @@ public class GuiClass {
         sizeText.setSize(135, 30);
         spawnMenu.add(sizeText);
 
+        JTextField elas = new JTextField("0.75");
+        elas.setLocation(5, 110);
+        elas.setSize(135, 30);
+        spawnMenu.add(elas);
+        JTextComponent elasText = new JTextField("Elasticity");
+        elasText.setEditable(false);
+        elasText.setLocation(155-spawnMenu.getInsets().right, 110);
+        elasText.setSize(135, 30);
+        spawnMenu.add(elasText);
+
         int totalFrameSize = 300-(spawnMenu.getInsets().left+spawnMenu.getInsets().right);
 
         JTextComponent errorText = new JTextField("");
@@ -128,14 +139,15 @@ public class GuiClass {
         rect.addActionListener(e2 -> { //? If spawn rectangle button is clicked, spawn a rectangle.
             String massT = mass.getText();
             String sizeT = size.getText();
+            String elasT = elas.getText();
 
             //? Tell if mass and size are numbers
-            if (!massT.matches("[0-9]+") || !sizeT.matches("[0-9]+")) {
-                errorText.setText("Mass &/or Size must be a number!");
+            if ((!massT.matches("[0-9]+") && !massT.matches("[0-9]+.[0-9]+")) || !sizeT.matches("[0-9]+") || !elasT.matches("[0-9]+.[0-9]+")) {
+                errorText.setText("Check Mass, Size, or Elasticity!");
                 return;
             }
 
-            manager.createBody(0, Integer.parseInt(massT), Integer.parseInt(sizeT), location, canCollide.isEnabled(), isStatic.isEnabled());
+            manager.createBody(0, Double.parseDouble(massT), Integer.parseInt(sizeT), Double.parseDouble(elasT), location, canCollide.isSelected(), isStatic.isSelected());
             spawnMenu.dispose();
         });
         rect.setLocation(5, 200);
@@ -146,14 +158,14 @@ public class GuiClass {
         sphere.addActionListener(e2 -> { //? If spawn ball button is clicked, spawn a ball.
             String massT = mass.getText();
             String sizeT = size.getText();
+            String elasT = elas.getText();
 
             //? Tell if mass and size are numbers
-            if (!massT.matches("[0-9]+") || !sizeT.matches("[0-9]+")) {
-                spawnMenu.getGraphics().drawString("Mass &/or Size must be a number!", 180, 5);
+            if ((!massT.matches("[0-9]+") && !massT.matches("[0-9]+.[0-9]+")) || !sizeT.matches("[0-9]+") || !elasT.matches("[0-9]+.[0-9]+")) {
+                errorText.setText("Check Mass, Size, or Elasticity!");
                 return;
             }
-
-            manager.createBody(1, Integer.parseInt(massT), Integer.parseInt(sizeT), location, canCollide.isEnabled(), isStatic.isEnabled());
+            manager.createBody(1, Double.parseDouble(massT), Integer.parseInt(sizeT), Double.parseDouble(elasT), location, canCollide.isSelected(), isStatic.isSelected());
             spawnMenu.dispose();
         });
         sphere.setLocation(155-spawnMenu.getInsets().right, 200);
@@ -175,28 +187,25 @@ public class GuiClass {
 
     public void render(ArrayList<GenericBody> bodies, int framerate) { //! On render, refresh the screen.
         if (g == null) {
-            return;
+           return;
         }
 
-        insets = mainFrame.getInsets();
-        
-        g.clearRect(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
-        g.drawString("FPS: " + (framerate), insets.left+5, insets.top+15);
+        panel.updateArgs(bodies, framerate);
+        mainFrame.repaint();
+    }
 
-        for (int i = 0; i < bodies.size(); i++) {
-            GenericBody body = bodies.get(i);
-            
-            //! Detect what body is what and render it.
-            if (body instanceof RectBody) {
-                g.drawRect(body.getPosition()[0]-(body.getSize()/2), body.getPosition()[1]-(body.getSize()/2), body.getSize(), body.getSize());
-            } else if (body instanceof SphereBody) {
-                g.drawOval(body.getPosition()[0]-(body.getSize()/2), body.getPosition()[1]-(body.getSize()/2), body.getSize(), body.getSize());
-                int[][] bounds = body.getBounds();
-
-                for (int j = 0; j < bounds.length; j++) {
-                    g.drawLine(bounds[j][0], bounds[j][1], bounds[(j+1)%bounds.length][0], bounds[(j+1)%bounds.length][1]);
-                };
-            }
+    public Insets getInsets() {
+        if (insets == null) {
+            insets = mainFrame.getInsets();
         }
+        return insets;
+    }
+
+    public GameFrame getFrame() {
+        return mainFrame;
+    }
+
+    public GamePanel getPanel() {
+        return panel;
     }
 }
