@@ -3,8 +3,6 @@ public abstract class GenericBody {
     protected boolean canCollide;
     protected boolean isStatic;
 
-    public abstract void create(double mass, double size, int[] position, boolean canCollide, boolean isStatic);
-
     public abstract void move(int[] position);
 
     public abstract int[] getPosition();
@@ -15,7 +13,7 @@ public abstract class GenericBody {
 
     public abstract void setVelocity(int[] velocity);
 
-    public abstract double getArea();
+    public abstract int[][] getBounds();
 
-    public abstract double getSize();
+    public abstract int getSize();
 }

@@ -1,13 +1,12 @@
 public class RectBody extends GenericBody {
      protected double mass;
-     private double size;
+     private int size;
      private int[] position = new int[2];
      private int[] velocity = new int[2];
      protected boolean canCollide;
      protected boolean isStatic;
 
-    @Override
-    public void create(double mass, double size, int[] position, boolean canCollide, boolean isStatic) {
+    RectBody(double mass, int size, int[] position, boolean canCollide, boolean isStatic) {
         if (mass < 0) throw new IllegalArgumentException("Mass cannot be negative");
         if (size <= 0) throw new IllegalArgumentException("Size cannot be negative or zero");
 
@@ -44,12 +43,13 @@ public class RectBody extends GenericBody {
     }
 
     @Override
-    public double getArea() {
-        return Math.pow(size, 2);
+    public int[][] getBounds() {
+        int radius = (int) size/2;
+        return new int[][] {new int[] {position[0]-radius, position[1]-radius}, new int[] {position[0]+radius, position[1]-size}, new int[] {position[0]+radius, position[1]+radius}, new int[] {position[0]-radius, position[1]+radius}};
     }
 
     @Override
-    public double getSize() {
+    public int getSize() {
         return size;
     }
 }
