@@ -21,9 +21,11 @@ public class GuiClass {
     private ManagerClass manager;
     private Insets insets;
 
-    public void createMenu(ManagerClass manager) {
+    public GuiClass(ManagerClass manager) {
         this.manager = manager;
+    }
 
+    public void createMenu(boolean wireframe) {
         //* Create blank window
         JFrame menu = new JFrame("2DPSE Menu");
         JPanel panel1 = new JPanel();
@@ -39,7 +41,7 @@ public class GuiClass {
         //* Populate screen
         JButton start = new JButton("Launch Sandbox");
         start.addActionListener(e -> {
-            createWindow();
+            createWindow(wireframe);
             menu.dispose();
         });
         start.setHorizontalTextPosition(AbstractButton.CENTER);
@@ -52,9 +54,9 @@ public class GuiClass {
         menu.setVisible(true);
     }
 
-    public void createWindow() {
+    public void createWindow(boolean wireframe) {
         mainFrame = new GameFrame(manager);
-        panel = new GamePanel(mainFrame);
+        panel = new GamePanel(mainFrame, wireframe, manager);
         panel.setOpaque(true);
         panel.setLayout(null);
 
@@ -87,6 +89,7 @@ public class GuiClass {
         JCheckBox canCollide = new JCheckBox("Can Collide");
         canCollide.setLocation(5, 5);
         canCollide.setSize(135, 30);
+        canCollide.setSelected(true);
         spawnMenu.add(canCollide);
 
         JCheckBox isStatic = new JCheckBox("Is Static");
