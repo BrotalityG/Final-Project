@@ -12,12 +12,13 @@
  *      -panel: GamePanel
  *      -g: Graphics
  *      -manager: ManagerClass
+ *      -settings: ArrayList<Object>
  *      -insets: Insets
  *
  * 
  * Methods: 
- * 		+GuiClass<ManagerClass>
- *      +createMenu(boolean): void
+ * 		+GuiClass<ManagerClass, ArrayList<Object>>
+ *      +createMenu(): void
  *      +createWindow(boolean): void
  *      +openSpawnMenu(MouseEvent): void
  *      +render(ArrayList<GenericBody>, int): void
@@ -48,14 +49,17 @@ public class GuiClass {
     private GamePanel panel;
     private Graphics g;
     private ManagerClass manager;
+    private ArrayList<Object> settings;
     private Insets insets;
 
-    public GuiClass(ManagerClass manager) {
+    public GuiClass(ManagerClass manager, ArrayList<Object> settings) {
         this.manager = manager;
+        this.settings = settings;
     }
 
-    public void createMenu(boolean wireframe) {
+    public void createMenu() { //? Create menu
         //* Create blank window
+        boolean wireframe = (boolean) settings.get(3);
         JFrame menu = new JFrame("2DPSE Menu");
         JPanel panel1 = new JPanel();
         panel1.setOpaque(true);
@@ -83,7 +87,7 @@ public class GuiClass {
         menu.setVisible(true);
     }
 
-    public void createWindow(boolean wireframe) {
+    public void createWindow(boolean wireframe) { //? Create window
         mainFrame = new GameFrame(manager);
         panel = new GamePanel(mainFrame, wireframe, manager);
         panel.setOpaque(true);
@@ -181,6 +185,10 @@ public class GuiClass {
 
             manager.createBody(0, Double.parseDouble(massT), Integer.parseInt(sizeT), Double.parseDouble(elasT), location, canCollide.isSelected(), isStatic.isSelected());
             spawnMenu.dispose();
+            
+            if ((boolean) settings.get(4)) {
+                System.out.println("Spawned rectangle with mass " + Double.parseDouble(massT) + " and size " + Integer.parseInt(sizeT));
+            }
         });
         rect.setLocation(5, 200);
         rect.setSize(135, 30);
@@ -199,6 +207,10 @@ public class GuiClass {
             }
             manager.createBody(1, Double.parseDouble(massT), Integer.parseInt(sizeT), Double.parseDouble(elasT), location, canCollide.isSelected(), isStatic.isSelected());
             spawnMenu.dispose();
+            
+            if ((boolean) settings.get(4)) {
+                System.out.println("Spawned ball with mass " + Double.parseDouble(massT) + " and size " + Integer.parseInt(sizeT));
+            }
         });
         sphere.setLocation(155-spawnMenu.getInsets().right, 200);
         sphere.setSize(135, 30);
@@ -215,6 +227,10 @@ public class GuiClass {
         sphere.setAlignmentY(AbstractButton.CENTER);
 
         spawnMenu.setVisible(true);
+
+        if ((boolean) settings.get(4)) {
+            System.out.println("Opened Spawn Menu");
+        }
     }
 
     public void render(ArrayList<GenericBody> bodies, int framerate) { //! On render, refresh the screen.

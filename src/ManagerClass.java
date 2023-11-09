@@ -48,6 +48,8 @@
 *        0 = Use Earth Gravity
 *        1 = Use Particle Gravity
 *        2 = Exaggeration Factor (Basically, by what magnitude is particle gravity multiplied by)
+*        3 = Wireframe Rendering
+*        4 = Debug Mode
 */
 
 import java.awt.Color;
@@ -72,13 +74,12 @@ public class ManagerClass {
 
     public static void main(String[] args) {
         manager = new ManagerClass();
-        gui = new GuiClass(manager);
         
         manager.readData();
 
-        boolean wireframe = (Boolean) manager.settings.get(3);
+        gui = new GuiClass(manager, manager.settings);
 
-        gui.createMenu(wireframe);
+        gui.createMenu();
     }
 
     private void readData() {
