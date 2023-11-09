@@ -1,3 +1,34 @@
+/*********************************************************
+ * Filename: GenericBody
+ * Author: Branden Stahl
+ * Created: 10/09/23
+ * Modified: 11/08/23
+ * 
+ * Purpose: 
+ * This is the abstract class representing all bodies.
+ * 
+ * Attributes:
+ * 		
+ *  
+ * Methods: 
+ * 		+move(int[] position): void
+ * 	    +getPosition(): int[]
+ * 	    +getVelocity(): double[]
+ * 	    +setVelocity(double[] velocity): void
+ * 	    +getBounds(): int[][]
+ * 	    +getEdgeBounds(): int[][]
+ * 	    +getCollidingBodies(ArrayList<GenericBody> bodies): ArrayList<GenericBody>
+ * 	    +getSize(): int
+ * 	    +getElasticity(): double
+ * 	    +getMass(): double
+ * 	    +getColor(): Color
+ * 	    +canCollide(): boolean
+ * 	    +isStatic(): boolean
+ * 	    +setPreviousPos(): void
+ * 	    +getPreviousPos(): int[]
+ *
+ */
+
 import java.awt.Color;
 import java.util.ArrayList;
 

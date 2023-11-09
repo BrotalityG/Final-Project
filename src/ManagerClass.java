@@ -1,3 +1,37 @@
+/*********************************************************
+ * Filename: ManagerClass
+ * Author: Branden Stahl
+ * Created: 10/09/23
+ * Modified: 11/08/23
+ * 
+ * Purpose: 
+ * Main Manager class, handles all physics, timing, and controls of the simulation.
+ * 
+ * Attributes:
+ * 		-ManagerClass manager
+ * 		-GuiClass gui
+ * 		-ArrayList<GenericBody> bodies
+ * 		-ArrayList<Object> constants
+ * 		-ArrayList<Object> settings
+ * 		-Timer timer
+ * 		-Instant lastUpdate
+ * 
+ * Methods: 
+ * 		+main(String[]): void
+ * 		+readData(): void
+ * 		+startRender(): void
+ * 		+stopRender(): void
+ * 		+createBody(int, double, int, double, int[], boolean, boolean): void
+ * 		+onMouseClick(MouseEvent): void
+ * 		-Apply2BodyGravity(GenericBody, GenericBody, double): void
+ * 		-ApplyGravity(GenericBody, double): void
+ * 		-updatePosition(GenericBody, double): void
+ * 		-checkBounds(GenericBody): void
+ * 		-checkCollisions(GenericBody): void
+ * 		-updateAll(double): void
+ * 
+ */
+
 //***********************************/
 //* Formulas:
 //*  Force between two gravitational bodies: F= G(m1*m2)/r^2
@@ -167,7 +201,7 @@ public class ManagerClass {
             //? Set the new velocity of body1
             body1.setVelocity(newVelocity);
         }
-    } //14
+    }
 
     private void ApplyGravity(GenericBody body, double elapsedTime) { //! Apply gravity to a body.
         if ((Boolean) settings.get(0)) { //? If using Earth Gravity
@@ -221,16 +255,16 @@ public class ManagerClass {
         body.move(newPosition);
     }
 
-    private double getBodiesAngle(GenericBody body1, GenericBody body2) {
-        //? Get positional info
-        int[] position = body1.getPosition();
-        int[] position2 = body2.getPosition();
+    // private double getBodiesAngle(GenericBody body1, GenericBody body2) {
+    //     //? Get positional info
+    //     int[] position = body1.getPosition();
+    //     int[] position2 = body2.getPosition();
 
-        //? Calculate the angle between the two bodies
-        double angle = Math.atan2(position2[1] - position[1], position2[0] - position[0]);
+    //     //? Calculate the angle between the two bodies
+    //     double angle = Math.atan2(position2[1] - position[1], position2[0] - position[0]);
 
-        return angle;
-    }
+    //     return angle;
+    // }
 
     // private double getAngledOffset(GenericBody body1, GenericBody body2) { //! Get the relative angle between two bodies
     //     double velAngle = getAoA(body1, body2);
@@ -241,23 +275,23 @@ public class ManagerClass {
     //     return offset;
     // }
 
-    private double getAoA(GenericBody body1, GenericBody body2) { //! Get the angle of the collision between two bodies
-        double a = body1.getSize()/2.00;
-        double b = body2.getSize()/2.00;
-        double c = Math.sqrt(Math.pow(body1.getPreviousPos()[0] - body2.getPosition()[0], 2) + Math.pow(body1.getPreviousPos()[1] - body2.getPosition()[1], 2));
+    // private double getAoA(GenericBody body1, GenericBody body2) { //! Get the angle of the collision between two bodies
+    //     double a = body1.getSize()/2.00;
+    //     double b = body2.getSize()/2.00;
+    //     double c = Math.sqrt(Math.pow(body1.getPreviousPos()[0] - body2.getPosition()[0], 2) + Math.pow(body1.getPreviousPos()[1] - body2.getPosition()[1], 2));
 
-        double angle = Math.acos((Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2)) / (2 * c * b));
+    //     double angle = Math.acos((Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2)) / (2 * c * b));
 
-        if (Double.isNaN(angle)) {
-            angle = Math.acos(((Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2)) / (2 * c * b))-1);
+    //     if (Double.isNaN(angle)) {
+    //         angle = Math.acos(((Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2)) / (2 * c * b))-1);
 
-            if (Double.isNaN(angle)) {
-                angle = 0;
-            }
-        }
+    //         if (Double.isNaN(angle)) {
+    //             angle = 0;
+    //         }
+    //     }
 
-        return angle;
-    }
+    //     return angle;
+    // }
 
     // private void offsetNonstatic(GenericBody body1, GenericBody body2) { //! If both bodies are not static, do this instead
     //     //? Get positional info

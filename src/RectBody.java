@@ -1,3 +1,43 @@
+/*********************************************************
+ * Filename: RectBody
+ * Author: Branden Stahl
+ * Created: 10/09/23
+ * Modified: 11/08/23
+ * 
+ * Purpose: 
+ * Each instance of this class represents a rectangular body.
+ * 
+ * Attributes:
+ * 		-mass: double
+ * 		-size: int
+ * 		-position: int[]
+ * 		-velocity: double[]
+ * 		-elasticity: double
+ * 		-color: Color
+ * 		-canCollide: boolean
+ * 		-isStatic: boolean
+ * 		-prevPos: int[]
+ *  
+ * Methods: 
+ *      +RectBody<double, int, double, int[], boolean, boolean, Color>
+ * 		+move(int[]): void
+ * 	    +getPosition(): int[]
+ * 	    +getVelocity(): double[]
+ * 	    +setVelocity(double[]): void
+ * 	    +getBounds(): int[][]
+ * 	    +getEdgeBounds(): int[][]
+ * 	    +getCollidingBodies(ArrayList<GenericBody>): ArrayList<GenericBody>
+ * 	    +getSize(): int
+ * 	    +getElasticity(): double
+ * 	    +getMass(): double
+ * 	    +getColor(): Color
+ * 	    +canCollide(): boolean
+ * 	    +isStatic(): boolean
+ * 	    +setPreviousPos(): void
+ * 	    +getPreviousPos(): int[]
+ *
+ */
+
 import java.awt.Color;
 import java.util.ArrayList;
 

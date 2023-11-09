@@ -1,3 +1,32 @@
+/*********************************************************
+ * Filename: GuiClass
+ * Author: Branden Stahl
+ * Created: 10/25/23
+ * Modified: 11/08/23
+ * 
+ * Purpose: 
+ * Gui for game, handles all graphical display.
+ * 
+ * Attributes:
+ *      -mainFrame: GameFrame
+ *      -panel: GamePanel
+ *      -g: Graphics
+ *      -manager: ManagerClass
+ *      -insets: Insets
+ *
+ * 
+ * Methods: 
+ * 		+GuiClass<ManagerClass>
+ *      +createMenu(boolean): void
+ *      +createWindow(boolean): void
+ *      +openSpawnMenu(MouseEvent): void
+ *      +render(ArrayList<GenericBody>, int): void
+ *      +getInsets(): Insets
+ *      +getFrame(): GameFrame
+ *      +getPanel(): GamePanel
+ * 
+ */
+
 // import java.awt.*;
 import java.awt.Color;
 import java.awt.Graphics;

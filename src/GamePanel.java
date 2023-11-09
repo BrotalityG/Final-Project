@@ -1,3 +1,28 @@
+/*********************************************************
+ * Filename: GamePanel
+ * Author: Branden Stahl
+ * Created: 10/25/23
+ * Modified: 11/08/23
+ * 
+ * Purpose: 
+ * Panel for GameFrame, handles all rendering.
+ * 
+ * Attributes:
+ *      -bodies: ArrayList<GenericBody>
+ *      -framerate: int
+ *      -wireframe: boolean
+ *      -debugLines: boolean
+ *      -manager: ManagerClass
+ * 
+ * Methods: 
+ * 		+GamePanel<JFrame, boolean, ManagerClass>
+ *      +updateArgs(ArrayList<GenericBody>, int): void
+ *      -wireframeRender(Graphics): void
+ *      -render(Graphics): void
+ *      +paintComponent(Graphics): void
+ * 
+ */
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Insets;
@@ -24,7 +49,7 @@ public class GamePanel extends JPanel {
         this.framerate = framerate;
     }
 
-    public void wireframeRender(Graphics g) { //* Render as wireframe
+    private void wireframeRender(Graphics g) { //* Render as wireframe
         for (GenericBody body : bodies) {
             manager.checkCollisions(body);
             //! Detect what body is what and render it.
@@ -45,7 +70,7 @@ public class GamePanel extends JPanel {
         }
     }
 
-    public void render(Graphics g) {
+    private void render(Graphics g) {
         for (GenericBody body : bodies) {
             manager.checkCollisions(body);
             //! Detect what body is what and render it.

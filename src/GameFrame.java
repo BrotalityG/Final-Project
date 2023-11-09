@@ -1,3 +1,20 @@
+/*********************************************************
+ * Filename: GameFrame
+ * Author: Branden Stahl
+ * Created: 10/25/23
+ * Modified: 11/08/23
+ * 
+ * Purpose: 
+ * Frame for game, handles mouse events and window closing.
+ * 
+ * Attributes:
+ * 
+ * 
+ * Methods: 
+ * 		+GameFrame<ManagerClass>
+ * 
+ */
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
