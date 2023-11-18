@@ -102,46 +102,41 @@ public class SphereBody extends GenericBody {
         return new int[][] {new int[] {position[0]-radius, position[1]}, new int[] {position[0], position[1]+radius}, new int[] {position[0]+radius, position[1]}, new int[] {position[0], position[1]-radius}};
     }
 
+    private boolean isRectCollide(RectBody body) {
+        boolean isCollide = false;
+        int[] bodyPosition = body.getPosition();
+        double magnitude = Math.sqrt(Math.pow(position[0]-bodyPosition[0], 2) + Math.pow(position[1]-bodyPosition[1], 2));
+
+        if (magnitude <= getSize()/2.00) {
+            isCollide = true;
+        }
+
+        for (int[] bound : body.getEdgeBounds()) {
+            magnitude = Math.sqrt(Math.pow(bound[0]-bodyPosition[0], 2) + Math.pow(bound[1]-bodyPosition[1], 2));
+            if (magnitude <= getSize()/2.00) {
+                isCollide = true;
+            }
+        }
+
+        for (int[] bound : body.getBounds()) {
+            magnitude = Math.sqrt(Math.pow(bound[0]-bodyPosition[0], 2) + Math.pow(bound[1]-bodyPosition[1], 2));
+            if (magnitude <= getSize()/2.00) {
+                isCollide = true;
+            }
+        }
+
+        return isCollide;
+    }
+
     @Override
     public ArrayList<GenericBody> getCollidingBodies(ArrayList<GenericBody> bodies) { //! Collision detection. At least one of these bodies will always be a sphere. This is pain.
         ArrayList<GenericBody> collidingBodies = new ArrayList<GenericBody>();
 
         for (GenericBody body : bodies) { //? Iterate through all bodies in the list.
-            boolean added = false;
-
             if (body.canCollide() && !body.equals(this)) {
                 if (body instanceof RectBody) { //? If body is a rectbody, check to see if it's inside the body's bounds by comparing bounds.
-                    double radius = getSize()/2.00;
-                    int[] bodyPosition = getPosition();
-                    double magnitude = Math.sqrt(Math.pow(position[0]-bodyPosition[0], 2) + Math.pow(position[1]-bodyPosition[1], 2));
-
-                    if (magnitude <= radius) {
+                    if (isRectCollide((RectBody) body)) {
                         collidingBodies.add(body);
-                        added = true;
-                    }
-
-                    if (added) { continue; } //? If the body has already been added, skip the rest of the loop.
-
-                    int[][] edgeBounds = body.getEdgeBounds();
-                    for (int[] bound : edgeBounds) {
-                        magnitude = Math.sqrt(Math.pow(bound[0]-bodyPosition[0], 2) + Math.pow(bound[1]-bodyPosition[1], 2));
-                        if (magnitude <= radius) {
-                            collidingBodies.add(body);
-                            added = true;
-                            break;
-                        }
-                    }
-
-                    if (added) { continue; } //? If the body has already been added, skip the rest of the loop.
-
-                    int[][] bodyBounds = body.getBounds();
-                    for (int[] bound : bodyBounds) {
-                        magnitude = Math.sqrt(Math.pow(bound[0]-bodyPosition[0], 2) + Math.pow(bound[1]-bodyPosition[1], 2));
-                        if (magnitude <= radius) {
-                            collidingBodies.add(body);
-                            added = true;
-                            break;
-                        }
                     }
                 } else if (body instanceof SphereBody) { //? If body is a spherebody, check to see if the distance between the two bodies is less than the sum of their radii.
                     double radius = getSize()/2.00;
