@@ -2,23 +2,27 @@
  * Filename: ManagerClass
  * Author: Branden Stahl
  * Created: 10/09/23
- * Modified: 11/08/23
+ * Modified: 11/12/23
  * 
  * Purpose: 
  * Main Manager class, handles all physics, timing, and controls of the simulation.
  * 
  * Attributes:
- * 		-ManagerClass manager
- * 		-GuiClass gui
- * 		-ArrayList<GenericBody> bodies
- * 		-ArrayList<Object> constants
- * 		-ArrayList<Object> settings
- * 		-Timer timer
- * 		-Instant lastUpdate
+ * 		-manager: ManagerClass
+ * 		-gui: GuiClass
+ * 		-bodies: ArrayList<GenericBody>
+ * 		-constants: ArrayList<Object>
+ * 		-settings: ArrayList<Object>
+ * 		-timer: Timer
+ * 		-lastUpdate: Instant
  * 
  * Methods: 
  * 		+main(String[]): void
- * 		+readData(): void
+ *      -readConstants(): void
+ *      -parseConstants(): void
+ *      -readSettings(): void
+ *      -parseSettings(): void
+ * 		-readData(): void
  * 		+startRender(): void
  * 		+stopRender(): void
  * 		+createBody(int, double, int, double, int[], boolean, boolean): void
@@ -27,7 +31,8 @@
  * 		-ApplyGravity(GenericBody, double): void
  * 		-updatePosition(GenericBody, double): void
  * 		-checkBounds(GenericBody): void
- * 		-checkCollisions(GenericBody): void
+ * 		+setCollisionVelocity(GenericBody, GenericBody, double): void
+ * 		+checkCollisions(GenericBody): void
  * 		-updateAll(double): void
  * 
  */
@@ -82,7 +87,7 @@ public class ManagerClass {
         gui.createMenu();
     }
 
-    private void readData() {
+    private void readConstants() {
         try (FileReader read = new FileReader("Constants.DAT")) {
             BufferedReader reader = new BufferedReader(read);
             String line;
@@ -92,17 +97,9 @@ public class ManagerClass {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
-        try (FileReader read = new FileReader("Settings.DAT")) {
-            BufferedReader reader = new BufferedReader(read);
-            String line;
-            while ((line = reader.readLine()) != null) {
-                settings.add(line);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    private void parseConstants() {
         for (int i = 0; i < constants.size(); i++) {
             String var = (String) constants.get(i);
 
@@ -114,7 +111,21 @@ public class ManagerClass {
                 constants.set(i, Boolean.parseBoolean(var));
             }
         }
+    }
 
+    private void readSettings() {
+        try (FileReader read = new FileReader("Settings.DAT")) {
+            BufferedReader reader = new BufferedReader(read);
+            String line;
+            while ((line = reader.readLine()) != null) {
+                settings.add(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void parseSettings() {
         for (int i = 0; i < settings.size(); i++) {
             String var = (String) settings.get(i);
 
@@ -127,6 +138,13 @@ public class ManagerClass {
             }
 
         }
+    }
+
+    private void readData() {
+        readConstants();
+        parseConstants();
+        readSettings();
+        parseSettings();
     }
 
     public void startRender() {

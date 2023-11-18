@@ -52,7 +52,7 @@ public class SphereBody extends GenericBody {
      private boolean isStatic;
      private int[] prevPos;
 
-    SphereBody(double mass, int size, double elasticity, int[] position, boolean canCollide, boolean isStatic, Color color) {
+    public SphereBody(double mass, int size, double elasticity, int[] position, boolean canCollide, boolean isStatic, Color color) {
         if (mass < 0) throw new IllegalArgumentException("Mass cannot be negative");
         if (size <= 0) throw new IllegalArgumentException("Size cannot be negative or zero");
         if (elasticity < 0 || elasticity > 1) throw new IllegalArgumentException("Elasticity must be between 0 and 1");
