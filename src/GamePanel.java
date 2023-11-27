@@ -55,8 +55,10 @@ public class GamePanel extends JPanel {
             //! Detect what body is what and render it.
             if (body instanceof RectBody) {
                 g.drawRect(body.getPosition()[0]-(body.getSize()/2), body.getPosition()[1]-(body.getSize()/2), body.getSize(), body.getSize());
+                g.drawString(Integer.toString(body.getID()), body.getPosition()[0], body.getPosition()[1]);
             } else if (body instanceof SphereBody) {
                 g.drawOval(body.getPosition()[0]-(body.getSize()/2), body.getPosition()[1]-(body.getSize()/2), body.getSize(), body.getSize());
+                g.drawString(Integer.toString(body.getID()), body.getPosition()[0], body.getPosition()[1]);
                 int[][] bounds = body.getBounds();
 
                 for (int j = 0; j < bounds.length; j++) {

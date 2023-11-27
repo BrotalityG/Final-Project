@@ -51,8 +51,10 @@ public class SphereBody extends GenericBody {
      private boolean canCollide;
      private boolean isStatic;
      private int[] prevPos;
+     private ArrayList<GenericBody> excludeBodies = new ArrayList<GenericBody>();
+     private int ID;
 
-    SphereBody(double mass, int size, double elasticity, int[] position, boolean canCollide, boolean isStatic, Color color) {
+    SphereBody(double mass, int size, double elasticity, int[] position, boolean canCollide, boolean isStatic, Color color, int ID) {
         if (mass < 0) throw new IllegalArgumentException("Mass cannot be negative");
         if (size <= 0) throw new IllegalArgumentException("Size cannot be negative or zero");
         if (elasticity < 0 || elasticity > 1) throw new IllegalArgumentException("Elasticity must be between 0 and 1");
@@ -65,6 +67,7 @@ public class SphereBody extends GenericBody {
         this.velocity = new double[] {0, 0};
         this.elasticity = elasticity;
         this.color = color;
+        this.ID = ID;
     }
 
     @Override
@@ -134,6 +137,18 @@ public class SphereBody extends GenericBody {
 
         for (GenericBody body : bodies) { //? Iterate through all bodies in the list.
             if (body.canCollide() && !body.equals(this)) {
+                boolean match = false;
+                for (int i = 0; i < excludeBodies.size(); i++) {
+                    if (body.equals(excludeBodies.get(i))) {
+                        match = true;
+                        excludeBodies.remove(i);
+                    }
+                }
+
+                if (match) {
+                    continue;
+                }
+
                 if (body instanceof RectBody) { //? If body is a rectbody, check to see if it's inside the body's bounds by comparing bounds.
                     if (isRectCollide((RectBody) body)) {
                         collidingBodies.add(body);
@@ -192,5 +207,15 @@ public class SphereBody extends GenericBody {
     @Override
     public boolean isStatic() {
         return isStatic;
+    }
+
+    @Override
+    public void setExcludeBody(GenericBody body) {
+        excludeBodies.add(body);
+    }
+
+    @Override
+    public int getID() {
+        return ID;
     }
 }

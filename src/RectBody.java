@@ -51,8 +51,10 @@ public class RectBody extends GenericBody {
      private boolean canCollide;
      private boolean isStatic;
      private int[] prevPos;
+     private ArrayList<GenericBody> excludeBodies = new ArrayList<GenericBody>();
+     private int ID;
 
-    RectBody(double mass, int size, double elasticity, int[] position, boolean canCollide, boolean isStatic, Color color) {
+    RectBody(double mass, int size, double elasticity, int[] position, boolean canCollide, boolean isStatic, Color color, int ID) {
         if (mass < 0) throw new IllegalArgumentException("Mass cannot be negative");
         if (size <= 0) throw new IllegalArgumentException("Size cannot be negative or zero");
         if (elasticity < 0 || elasticity > 1) throw new IllegalArgumentException("Elasticity must be between 0 and 1");
@@ -65,6 +67,7 @@ public class RectBody extends GenericBody {
         this.velocity = new double[] {0, 0};
         this.elasticity = elasticity;
         this.color = color;
+        this.ID = ID;
     }
 
     @Override
@@ -132,6 +135,18 @@ public class RectBody extends GenericBody {
 
         for (GenericBody body : bodies) { //? Iterate through all bodies in the list.
             if (body.canCollide() && !body.equals(this)) {
+                boolean match = false;
+                for (int i = 0; i < excludeBodies.size(); i++) {
+                    if (body.equals(excludeBodies.get(i))) {
+                        match = true;
+                        excludeBodies.remove(i);
+                    }
+                }
+
+                if (match) {
+                    continue;
+                }
+
                 if (body instanceof RectBody) { //? If body is a rectbody, check to see if it's inside the body's bounds by comparing bounds.
                     int[][] bodyBounds = body.getBounds();
                     if (bounds[0][0] <= bodyBounds[2][0] && bounds[2][0] >= bodyBounds[0][0] && bounds[0][1] <= bodyBounds[2][1] && bounds[2][1] >= bodyBounds[0][1]) {
@@ -186,5 +201,15 @@ public class RectBody extends GenericBody {
     @Override
     public boolean isStatic() {
         return isStatic;
+    }
+
+    @Override
+    public void setExcludeBody(GenericBody body) {
+        excludeBodies.add(body);
+    }
+
+    @Override
+    public int getID() {
+        return ID;
     }
 }

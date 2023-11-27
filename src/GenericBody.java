@@ -64,4 +64,8 @@ public abstract class GenericBody {
     public abstract void setPreviousPos();
 
     public abstract int[] getPreviousPos();
+
+    public abstract void setExcludeBody(GenericBody body);
+
+    public abstract int getID();
 }
