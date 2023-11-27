@@ -131,6 +131,45 @@ public class SphereBody extends GenericBody {
         return isCollide;
     }
 
+    private boolean isSphereCollide(SphereBody body) {
+        boolean isCollide = false;
+        int[] bodyPosition = body.getPosition();
+        double magnitude = Math.sqrt(Math.pow(position[0]-bodyPosition[0], 2) + Math.pow(position[1]-bodyPosition[1], 2));
+
+        if (magnitude <= body.getSize()/2.00) {
+            isCollide = true;
+        }
+
+        for (int[] bound : getEdgeBounds()) {
+            magnitude = Math.sqrt(Math.pow(bound[0]-bodyPosition[0], 2) + Math.pow(bound[1]-bodyPosition[1], 2));
+            if (magnitude <= body.getSize()/2.00) {
+                isCollide = true;
+            }
+        }
+
+        for (int[] bound : getBounds()) {
+            magnitude = Math.sqrt(Math.pow(bound[0]-bodyPosition[0], 2) + Math.pow(bound[1]-bodyPosition[1], 2));
+            if (magnitude <= body.getSize()/2.00) {
+                isCollide = true;
+            }
+        }
+
+        return isCollide;
+    }
+
+    @Override
+    public boolean isTouching(GenericBody body) {
+        boolean isTouching = false;
+
+        if (body instanceof RectBody) {
+            isTouching = isRectCollide((RectBody) body);
+        } else if (body instanceof SphereBody) {
+            isTouching = isSphereCollide((SphereBody) body);
+        }
+
+        return isTouching;
+    }
+
     @Override
     public ArrayList<GenericBody> getCollidingBodies(ArrayList<GenericBody> bodies) { //! Collision detection. At least one of these bodies will always be a sphere. This is pain.
         ArrayList<GenericBody> collidingBodies = new ArrayList<GenericBody>();
@@ -141,6 +180,7 @@ public class SphereBody extends GenericBody {
                 for (int i = 0; i < excludeBodies.size(); i++) {
                     if (body.equals(excludeBodies.get(i))) {
                         match = true;
+                    } if (!excludeBodies.get(i).isTouching(this)) {
                         excludeBodies.remove(i);
                     }
                 }
@@ -149,19 +189,8 @@ public class SphereBody extends GenericBody {
                     continue;
                 }
 
-                if (body instanceof RectBody) { //? If body is a rectbody, check to see if it's inside the body's bounds by comparing bounds.
-                    if (isRectCollide((RectBody) body)) {
-                        collidingBodies.add(body);
-                    }
-                } else if (body instanceof SphereBody) { //? If body is a spherebody, check to see if the distance between the two bodies is less than the sum of their radii.
-                    double radius = getSize()/2.00;
-                    double radii = radius + body.getSize()/2.00;
-                    int[] bodyPosition = body.getPosition();
-                    double magnitude = Math.sqrt(Math.pow(position[0]-bodyPosition[0], 2) + Math.pow(position[1]-bodyPosition[1], 2));
-
-                    if (magnitude <= radii) {
-                        collidingBodies.add(body);
-                    }
+                if (body.isTouching(this)) {
+                    collidingBodies.add(body);
                 }
             }
         }
@@ -212,6 +241,11 @@ public class SphereBody extends GenericBody {
     @Override
     public void setExcludeBody(GenericBody body) {
         excludeBodies.add(body);
+    }
+
+    @Override
+    public ArrayList<GenericBody> getExcludedBodies() {
+        return excludeBodies;
     }
 
     @Override

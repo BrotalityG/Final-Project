@@ -214,8 +214,24 @@ public class ManagerClass {
         }
     }
 
+    private boolean checkToApply(GenericBody body1, GenericBody body2) {
+        boolean canApply = true;
+
+        if (body1.getExcludedBodies() != null) {
+            for (GenericBody body : body1.getExcludedBodies()) {
+                if (body == body2) {
+                    canApply = false;
+                }
+            }
+        } else if (body1.isTouching(body2)) {
+            canApply = false;
+        }
+
+        return canApply;
+    }
+
     private void Apply2BodyGravity(GenericBody body1, GenericBody body2, double elapsedTime) { //! Apply gravity to a body with reference to another.
-        if ((Boolean) settings.get(1)) { //? If using Particle Gravity
+        if ((Boolean) settings.get(1) && checkToApply(body1, body2)) { //? If using Particle Gravity
             double exag = (Double) settings.get(2); //? Exaggeration Factor
             double G = 6.67408e-11; //? Gravitational constant
             double m1 = body1.getMass()*(Math.pow(10, exag));
@@ -256,7 +272,7 @@ public class ManagerClass {
         int pixels = (int) constants.get(1);
 
         //? Calculate the new position of the body
-        newPosition = new int[] {newPosition[0] + (int) ((body.getVelocity()[0] * elapsedTime)/pixels), newPosition[1] + (int) ((body.getVelocity()[1] * elapsedTime)/pixels)};
+        newPosition = new int[] {newPosition[0] + (int) ((body.getVelocity()[0] * elapsedTime)/(double) pixels), newPosition[1] + (int) ((body.getVelocity()[1] * elapsedTime)/(double) pixels)};
 
         //? Set the new position of the body
         body.setPreviousPos();
@@ -338,24 +354,39 @@ public class ManagerClass {
         double angle = getAoA(body1, body2);
         double angle2 = Math.PI-angle;
 
-        System.out.println("Angle: " + angle);
+        //System.out.println("Angle: " + angle);
 
         //? Offset bodies so they are not clipping
-        position = new int[] {(int) ((Math.cos(angle)*((body1.getSize()/2)+(body2.getSize()/2)))/2+position2[0]+1), (int) ((Math.sin(angle)*((body1.getSize()/2)+(body2.getSize()/2)))/2+position2[1]+1)};
-        position2 = new int[] {(int) ((Math.cos(angle2)*((body1.getSize()/2)+(body2.getSize()/2)))/2+position[0]+1), (int) ((Math.sin(angle2)*((body1.getSize()/2)+(body2.getSize()/2)))/2+position[1]+1)};
+        position = new int[] {(int) ((Math.cos(angle2)*((body1.getSize()/2)+(body2.getSize()/2)))/2+position2[0]), (int) ((Math.sin(angle2)*((body1.getSize()/2)+(body2.getSize()/2)))/2+position2[1])};
+        position2 = new int[] {(int) ((Math.cos(angle)*((body1.getSize()/2)+(body2.getSize()/2)))/2+position[0]), (int) ((Math.sin(angle)*((body1.getSize()/2)+(body2.getSize()/2)))/2+position[1])};
     }
 
-    private void offsetBody(GenericBody body1, GenericBody body2) {
+    private double calculateStaticAngle(GenericBody body1, GenericBody body2) { //! Get angle of collision between a static body and a non-static body
+        double initAngle = getAoA(body1, body2);
+        double velAngle = Math.atan2(body1.getVelocity()[1], body1.getVelocity()[0]);
+        double angle = initAngle;
+
+        double velocityTotal = Math.sqrt(Math.pow(body1.getVelocity()[0], 2) + Math.pow(body1.getVelocity()[1], 2));
+        //System.out.println("Velocity: " + velocityTotal);
+
+        if (velocityTotal > 1) {
+            angle = Math.sqrt(Math.pow(initAngle, 2) + Math.pow(velAngle, 2));
+        }
+
+        return angle;
+    }
+
+    private void offsetBody(GenericBody body1, GenericBody body2) { //! If one body is static, do this instead
         //? Get positional info
         int[] position = body2.getPosition();
 
         //? Get angle of the other body relative to the body's trajectory
-        double angle = getAoA(body1, body2);
+        double angle = calculateStaticAngle(body1, body2);
 
-        System.out.println("Angle: " + angle);
+        //System.out.println("Angle: " + angle);
 
         //? Offset bodies so they are not clipping
-        position = new int[] {(int) ((Math.cos(angle)*((body1.getSize()/2)+(body2.getSize()/2)))+position[0]+1), (int) ((Math.sin(angle)*((body1.getSize()/2)+(body2.getSize()/2)))+position[1]+1)};
+        position = new int[] {(int) ((Math.cos(angle)*((body1.getSize()/2)+(body2.getSize()/2)))+position[0]), (int) ((Math.sin(angle)*((body1.getSize()/2)+(body2.getSize()/2)))+position[1])};
 
         //? Set the new position of the body
         body1.move(position);
@@ -397,14 +428,11 @@ public class ManagerClass {
         //? Apply the new velocities
         body.setVelocity(newVelocity1);
         body2.setVelocity(newVelocity2);
-
-        body.setExcludeBody(body2);
-        body2.setExcludeBody(body);
     }
 
-    public void setStaticCollisionVelocity(GenericBody body, GenericBody body2) { // Exclude body 2 since body 2 is static
+    public void setStaticCollisionVelocity(GenericBody body, GenericBody body2) { //! Exclude body 2 since body 2 is static
         offsetBody(body, body2);
-        double angle1 = getAoA(body, body2);
+        double angle1 = Math.PI-getAoA(body, body2);
 
         double totalElasticity = body.getElasticity()*body2.getElasticity();
 
@@ -418,8 +446,6 @@ public class ManagerClass {
         body.setVelocity(newVelocity1);
         
         body.setExcludeBody(body2);
-        checkCollisions(body);
-        body.setExcludeBody(body2);
     }
 
     public void checkCollisions(GenericBody body) { //! Check if a body is colliding with another.
@@ -427,7 +453,7 @@ public class ManagerClass {
             ArrayList<GenericBody> colliding = body.getCollidingBodies(bodies); //? Get a list of all colliding bodies.
 
             for (GenericBody body2 : colliding) { //? Iterate through all colliding bodies
-                System.out.println("Body (" + body2.getClass().getName() + ": " + body2.getID() + ") is colliding with (" + body.getClass().getName() + ": " + body.getID() + ")!");
+                //System.out.println("Body (" + body2.getClass().getName() + ": " + body2.getID() + ") is colliding with (" + body.getClass().getName() + ": " + body.getID() + ")!");
 
                 if (body2.isStatic() && body.getPreviousPos() != body.getPosition()) {
                     setStaticCollisionVelocity(body, body2);
@@ -443,10 +469,9 @@ public class ManagerClass {
             return;
         }
 
-        if (body.getPreviousPos()[0] == body.getPosition()[0] && body.getPreviousPos()[1] == body.getPosition()[1]) {
-            if (!(body.getVelocity()[0] == 0) && !(body.getVelocity()[1] == 0)) {
-                System.out.println("Body " + body.getClass().getName() + " is stuck!");
-            }
+        if (body.getPreviousPos()[0] == body.getPosition()[0] && body.getPreviousPos()[1] == body.getPosition()[1] && (Double.isNaN(body.getVelocity()[0]) || Double.isNaN(body.getVelocity()[1]))) {
+            System.out.println("Body " + body.getClass().getName() + " is stuck! Resetting Velocity...");
+            body.setVelocity(new double[] {0, 0});
         }
     }
 

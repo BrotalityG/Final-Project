@@ -45,6 +45,8 @@ public abstract class GenericBody {
 
     public abstract int[][] getEdgeBounds();
 
+    public abstract boolean isTouching(GenericBody body);
+
     public ArrayList<GenericBody> getCollidingBodies(ArrayList<GenericBody> bodies) {
         return new ArrayList<GenericBody>();
     }
@@ -66,6 +68,8 @@ public abstract class GenericBody {
     public abstract int[] getPreviousPos();
 
     public abstract void setExcludeBody(GenericBody body);
+
+    public abstract ArrayList<GenericBody> getExcludedBodies();
 
     public abstract int getID();
 }

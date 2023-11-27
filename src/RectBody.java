@@ -102,6 +102,29 @@ public class RectBody extends GenericBody {
         return new int[][] {new int[] {position[0]-radius, position[1]}, new int[] {position[0], position[1]+radius}, new int[] {position[0]+radius, position[1]}, new int[] {position[0], position[1]-radius}};
     }
 
+    private boolean checkInBounds(int[] bounds) {
+        boolean inBounds = false;
+
+        if (bounds[0] >= getBounds()[0][0] && bounds[0] <= getBounds()[2][0] && bounds[1] >= getBounds()[0][1] && bounds[1] <= getBounds()[2][1]) {
+            inBounds = true;
+        }
+
+        return inBounds;
+    }
+
+    private boolean isRectCollide(RectBody body) {
+        boolean isCollide = false;
+        int[][] bounds = body.getBounds();
+
+        for (int[] bound : bounds) {
+            if (bound[0] >= getBounds()[0][0] && bound[0] <= getBounds()[2][0] && bound[1] >= getBounds()[0][1] && bound[1] <= getBounds()[2][1]) {
+                isCollide = true;
+            }
+        }
+
+        return isCollide;
+    }
+
     private boolean isSphereCollide(SphereBody body) {
         boolean isCollide = false;
         int[] bodyPosition = body.getPosition();
@@ -111,16 +134,14 @@ public class RectBody extends GenericBody {
             isCollide = true;
         }
 
-        for (int[] bound : getEdgeBounds()) {
-            magnitude = Math.sqrt(Math.pow(bound[0]-bodyPosition[0], 2) + Math.pow(bound[1]-bodyPosition[1], 2));
-            if (magnitude <= body.getSize()/2.00) {
+        for (int[] bound : body.getEdgeBounds()) {
+            if (checkInBounds(bound)) {
                 isCollide = true;
             }
         }
 
         for (int[] bound : getBounds()) {
-            magnitude = Math.sqrt(Math.pow(bound[0]-bodyPosition[0], 2) + Math.pow(bound[1]-bodyPosition[1], 2));
-            if (magnitude <= body.getSize()/2.00) {
+            if (checkInBounds(bound)) {
                 isCollide = true;
             }
         }
@@ -129,8 +150,20 @@ public class RectBody extends GenericBody {
     }
 
     @Override
+    public boolean isTouching(GenericBody body) {
+        boolean isTouching = false;
+
+        if (body instanceof RectBody) {
+            isTouching = isRectCollide((RectBody) body);
+        } else if (body instanceof SphereBody) {
+            isTouching = isSphereCollide((SphereBody) body);
+        }
+
+        return isTouching;
+    }
+
+    @Override
     public ArrayList<GenericBody> getCollidingBodies(ArrayList<GenericBody> bodies) { //! Collision detection. Rects are easy, spheres not so much.
-        int[][] bounds = getBounds();
         ArrayList<GenericBody> collidingBodies = new ArrayList<GenericBody>();
 
         for (GenericBody body : bodies) { //? Iterate through all bodies in the list.
@@ -139,6 +172,7 @@ public class RectBody extends GenericBody {
                 for (int i = 0; i < excludeBodies.size(); i++) {
                     if (body.equals(excludeBodies.get(i))) {
                         match = true;
+                    } if (!excludeBodies.get(i).isTouching(this)) {
                         excludeBodies.remove(i);
                     }
                 }
@@ -147,15 +181,8 @@ public class RectBody extends GenericBody {
                     continue;
                 }
 
-                if (body instanceof RectBody) { //? If body is a rectbody, check to see if it's inside the body's bounds by comparing bounds.
-                    int[][] bodyBounds = body.getBounds();
-                    if (bounds[0][0] <= bodyBounds[2][0] && bounds[2][0] >= bodyBounds[0][0] && bounds[0][1] <= bodyBounds[2][1] && bounds[2][1] >= bodyBounds[0][1]) {
-                        collidingBodies.add(body);
-                    }
-                } else if (body instanceof SphereBody) { //? If body is a spherebody, check to see if it's inside the body's bounds.
-                    if (isSphereCollide((SphereBody) body)) {
-                        collidingBodies.add(body);
-                    }
+                if (body.isTouching(this)) {
+                    collidingBodies.add(body);
                 }
             }
         }
@@ -206,6 +233,11 @@ public class RectBody extends GenericBody {
     @Override
     public void setExcludeBody(GenericBody body) {
         excludeBodies.add(body);
+    }
+
+    @Override
+    public ArrayList<GenericBody> getExcludedBodies() {
+        return excludeBodies;
     }
 
     @Override
