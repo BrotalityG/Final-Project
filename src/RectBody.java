@@ -54,7 +54,11 @@ public class RectBody extends GenericBody {
      private ArrayList<GenericBody> excludeBodies = new ArrayList<GenericBody>();
      private int ID;
 
+<<<<<<< HEAD
     RectBody(double mass, int size, double elasticity, int[] position, boolean canCollide, boolean isStatic, Color color, int ID) {
+=======
+    public RectBody(double mass, int size, double elasticity, int[] position, boolean canCollide, boolean isStatic, Color color) {
+>>>>>>> 584b6525d574854aaebf14141cb7e0befd749858
         if (mass < 0) throw new IllegalArgumentException("Mass cannot be negative");
         if (size <= 0) throw new IllegalArgumentException("Size cannot be negative or zero");
         if (elasticity < 0 || elasticity > 1) throw new IllegalArgumentException("Elasticity must be between 0 and 1");

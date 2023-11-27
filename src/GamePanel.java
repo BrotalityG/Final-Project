@@ -38,7 +38,7 @@ public class GamePanel extends JPanel {
     private boolean debugLines = true;
     private ManagerClass manager;
 
-    GamePanel(JFrame parent, boolean wireframe, ManagerClass manager) {
+    public GamePanel(JFrame parent, boolean wireframe, ManagerClass manager) {
         super();
         this.wireframe = wireframe;
         this.manager = manager;
