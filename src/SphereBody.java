@@ -2,7 +2,7 @@
  * Filename: SphereBody
  * Author: Branden Stahl
  * Created: 10/09/23
- * Modified: 11/08/23
+ * Modified: 11/27/23
  * 
  * Purpose: 
  * Each instance of this class represents a circular body.
@@ -26,6 +26,9 @@
  * 	    +setVelocity(double[]): void
  * 	    +getBounds(): int[][]
  * 	    +getEdgeBounds(): int[][]
+ * 	    -isRectCollide(RectBody): boolean
+ * 	    -isSphereCollide(SphereBody): boolean
+ * 	    +isTouching(GenericBody): boolean
  * 	    +getCollidingBodies(ArrayList<GenericBody>): ArrayList<GenericBody>
  * 	    +getSize(): int
  * 	    +getElasticity(): double
@@ -35,6 +38,9 @@
  * 	    +isStatic(): boolean
  * 	    +setPreviousPos(): void
  * 	    +getPreviousPos(): int[]
+ * 	    +setExcludeBody(GenericBody): void
+ * 	    +getExcludedBodies(): ArrayList<GenericBody>
+ * 	    +getID(): int
  *
  */
 

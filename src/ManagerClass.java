@@ -2,7 +2,7 @@
  * Filename: ManagerClass
  * Author: Branden Stahl
  * Created: 10/09/23
- * Modified: 11/12/23
+ * Modified: 11/27/23
  * 
  * Purpose: 
  * Main Manager class, handles all physics, timing, and controls of the simulation.
@@ -25,14 +25,25 @@
  * 		-readData(): void
  * 		+startRender(): void
  * 		+stopRender(): void
+ * 		+generateNewID(): int
  * 		+createBody(int, double, int, double, int[], boolean, boolean): void
  * 		+onMouseClick(MouseEvent): void
+ * 		-checkToApply(GenericBody, GenericBody): boolean
  * 		-Apply2BodyGravity(GenericBody, GenericBody, double): void
  * 		-ApplyGravity(GenericBody, double): void
  * 		-updatePosition(GenericBody, double): void
  * 		-checkBounds(GenericBody): void
- * 		+setCollisionVelocity(GenericBody, GenericBody, double): void
- * 		+checkCollisions(GenericBody): void
+ * 		-getBodiesAngle(GenericBody, GenericBody): double
+ * 		-getAngledOffset(GenericBody, GenericBody): double
+ * 		-getAoA(GenericBody, GenericBody): double
+ * 		-offsetNonstatic(GenericBody, GenericBody): void
+ * 		-calculateStaticAngle(GenericBody, GenericBody): double
+ * 		-offsetBody(GenericBody, GenericBody): void
+ * 		-getVelocity(GenericBody, GenericBody): double
+ * 		-setCollisionVelocity(GenericBody, GenericBody): void
+ * 		-setStaticCollisionVelocity(GenericBody, GenericBody): void
+ * 		-checkCollisions(GenericBody): void
+ * 		-checkStuck(GenericBody): void
  * 		-updateAll(double): void
  * 
  */

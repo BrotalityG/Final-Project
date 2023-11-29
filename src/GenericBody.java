@@ -2,7 +2,7 @@
  * Filename: GenericBody
  * Author: Branden Stahl
  * Created: 10/09/23
- * Modified: 11/08/23
+ * Modified: 11/27/23
  * 
  * Purpose: 
  * This is the abstract class representing all bodies.
@@ -17,6 +17,7 @@
  * 	    +setVelocity(double[] velocity): void
  * 	    +getBounds(): int[][]
  * 	    +getEdgeBounds(): int[][]
+ * 	    +isTouching(GenericBody body): boolean
  * 	    +getCollidingBodies(ArrayList<GenericBody> bodies): ArrayList<GenericBody>
  * 	    +getSize(): int
  * 	    +getElasticity(): double
@@ -26,6 +27,9 @@
  * 	    +isStatic(): boolean
  * 	    +setPreviousPos(): void
  * 	    +getPreviousPos(): int[]
+ * 	    +setExcludeBody(GenericBody body): void
+ * 	    +getExcludedBodies(): ArrayList<GenericBody>
+ * 	    +getID(): int
  *
  */
 
