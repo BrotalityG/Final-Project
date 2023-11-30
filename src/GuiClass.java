@@ -71,18 +71,36 @@ public class GuiClass {
         menu.pack();
         menu.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
+        Toolkit tk = Toolkit.getDefaultToolkit();
+
         //* Populate screen
         JButton start = new JButton("Launch Sandbox");
         start.addActionListener(e -> {
             createWindow(wireframe);
             menu.dispose();
         });
-        start.setHorizontalTextPosition(AbstractButton.CENTER);
-        start.setVerticalTextPosition(AbstractButton.CENTER);
-        start.setAlignmentX(AbstractButton.CENTER);
-        start.setAlignmentY(AbstractButton.CENTER);
-        start.setBounds(Toolkit.getDefaultToolkit().getScreenSize().width/2, Toolkit.getDefaultToolkit().getScreenSize().height/2, Toolkit.getDefaultToolkit().getScreenSize().width/4, Toolkit.getDefaultToolkit().getScreenSize().height/8);
+        start.setBounds(tk.getScreenSize().width/2-tk.getScreenSize().width/8, tk.getScreenSize().height/2-tk.getScreenSize().height/16, tk.getScreenSize().width/4, tk.getScreenSize().height/8);
         panel1.add(start);
+        JButton loadFromFile = new JButton("Load From File");
+        loadFromFile.addActionListener(e -> {
+            createWindow(wireframe); //! Currently not implemented
+            menu.dispose();
+        });
+        loadFromFile.setBounds(tk.getScreenSize().width/2-tk.getScreenSize().width/8, tk.getScreenSize().height/2+tk.getScreenSize().height/16+5, tk.getScreenSize().width/4, tk.getScreenSize().height/8);
+        panel1.add(loadFromFile);
+        JButton set = new JButton("Settings");
+        set.addActionListener(e -> {
+            //! Currently not implemented
+            menu.dispose();
+        });
+        set.setBounds(tk.getScreenSize().width/2-tk.getScreenSize().width/8, tk.getScreenSize().height/2+(tk.getScreenSize().height/16)*3+10, tk.getScreenSize().width/4, tk.getScreenSize().height/16);
+        panel1.add(set);
+        JButton exit = new JButton("Exit");
+        exit.addActionListener(e -> {
+            menu.dispose();
+        });
+        exit.setBounds(tk.getScreenSize().width/2-tk.getScreenSize().width/8, tk.getScreenSize().height/2+(tk.getScreenSize().height/16)*4+15, tk.getScreenSize().width/4, tk.getScreenSize().height/16);
+        panel1.add(exit);
         
         menu.setVisible(true);
     }
