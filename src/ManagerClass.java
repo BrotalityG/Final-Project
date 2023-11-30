@@ -67,6 +67,7 @@
 
 import java.awt.Color;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.time.Duration;
 import java.time.Instant;
@@ -82,6 +83,7 @@ public class ManagerClass {
     private ArrayList<Object> constants;
     private ArrayList<Object> settings;
     private Timer timer;
+    private boolean running = false;
     private Instant lastUpdate;
 
     public static void main(String[] args) {
@@ -94,7 +96,7 @@ public class ManagerClass {
         gui.createMenu();
     }
 
-    private void readData() {
+    public void readData() {
         files = new FileAccessor();
 
         constants = files.getConstants();
@@ -102,7 +104,7 @@ public class ManagerClass {
     }
 
     public void startRender() {
-        timer = new Timer("Framerate Manager", true);
+        timer = new Timer();
 
         lastUpdate = Instant.now();
 
@@ -122,10 +124,13 @@ public class ManagerClass {
                 gui.render(bodies, (int) (1000/elapsed)); //? Render the simulation frame.
             }
         }, 0, 1000/120);
+
+        running = true;
     }
 
     public void stopRender() {
         timer.cancel();
+        running = false;
         System.out.println("Simulation Stopped.");
     }
 
@@ -166,6 +171,26 @@ public class ManagerClass {
                 gui.openSpawnMenu(e);
                 break;
         }
+    }
+
+    public void onKeyPress(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_SPACE: //! Spacebar
+                //? Pause/Unpause the simulation.
+                if (running) {
+                    stopRender();
+                } else {
+                    startRender();
+                }
+                break;
+            case KeyEvent.VK_ESCAPE: //! Escape
+                //? Pause the simulation and open pause menu.
+                gui.openPauseMenu();
+        }
+    }
+
+    public void saveToFile(String filename, boolean overwrite) {
+        files.saveToFile(filename, bodies, gui, overwrite);
     }
 
     private boolean checkToApply(GenericBody body1, GenericBody body2) {

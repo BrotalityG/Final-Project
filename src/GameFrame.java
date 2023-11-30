@@ -15,6 +15,7 @@
  * 
  */
 
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -39,6 +40,23 @@ public class GameFrame extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 manager.onMouseClick(e);
+            }
+        });
+
+        addKeyListener(new KeyListener() {
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent e) {
+                manager.onKeyPress(e);
+            }
+
+            @Override
+            public void keyReleased(java.awt.event.KeyEvent e) {
+                //! Do nothing
+            }
+
+            @Override
+            public void keyTyped(java.awt.event.KeyEvent e) {
+                //! Do nothing
             }
         });
     }
