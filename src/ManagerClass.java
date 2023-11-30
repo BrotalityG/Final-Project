@@ -10,6 +10,7 @@
  * Attributes:
  * 		-manager: ManagerClass
  * 		-gui: GuiClass
+ *      -files: FileAccessor
  * 		-bodies: ArrayList<GenericBody>
  * 		-constants: ArrayList<Object>
  * 		-settings: ArrayList<Object>
@@ -18,10 +19,6 @@
  * 
  * Methods: 
  * 		+main(String[]): void
- *      -readConstants(): void
- *      -parseConstants(): void
- *      -readSettings(): void
- *      -parseSettings(): void
  * 		-readData(): void
  * 		+startRender(): void
  * 		+stopRender(): void
@@ -71,8 +68,6 @@
 import java.awt.Color;
 import java.awt.Insets;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -82,9 +77,10 @@ import java.util.TimerTask;
 public class ManagerClass {
     private static ManagerClass manager;
     private static GuiClass gui;
+    private FileAccessor files;
     private ArrayList<GenericBody> bodies = new ArrayList<GenericBody>();
-    private ArrayList<Object> constants = new ArrayList<Object>();
-    private ArrayList<Object> settings = new ArrayList<Object>();
+    private ArrayList<Object> constants;
+    private ArrayList<Object> settings;
     private Timer timer;
     private Instant lastUpdate;
 
@@ -98,64 +94,11 @@ public class ManagerClass {
         gui.createMenu();
     }
 
-    private void readConstants() {
-        try (FileReader read = new FileReader("Constants.DAT")) {
-            BufferedReader reader = new BufferedReader(read);
-            String line;
-            while ((line = reader.readLine()) != null) {
-                constants.add(line);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void parseConstants() {
-        for (int i = 0; i < constants.size(); i++) {
-            String var = (String) constants.get(i);
-
-            if (var.matches("[0-9]+")) {
-                constants.set(i, Integer.parseInt(var));
-            } else if (var.matches("[0-9]+.[0-9]+")) {
-                constants.set(i, Double.parseDouble(var));
-            } else if (var.matches("true") || var.matches("false")) {
-                constants.set(i, Boolean.parseBoolean(var));
-            }
-        }
-    }
-
-    private void readSettings() {
-        try (FileReader read = new FileReader("Settings.DAT")) {
-            BufferedReader reader = new BufferedReader(read);
-            String line;
-            while ((line = reader.readLine()) != null) {
-                settings.add(line);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void parseSettings() {
-        for (int i = 0; i < settings.size(); i++) {
-            String var = (String) settings.get(i);
-
-            if (var.matches("[0-9]+")) {
-                settings.set(i, Integer.parseInt(var));
-            } else if (var.matches("[0-9]+.[0-9]+")) {
-                settings.set(i, Double.parseDouble(var));
-            } else if (var.matches("true") || var.matches("false")) {
-                settings.set(i, Boolean.parseBoolean(var));
-            }
-
-        }
-    }
-
     private void readData() {
-        readConstants();
-        parseConstants();
-        readSettings();
-        parseSettings();
+        files = new FileAccessor();
+
+        constants = files.getConstants();
+        settings = files.getSettings();
     }
 
     public void startRender() {
