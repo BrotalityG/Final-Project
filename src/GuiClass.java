@@ -365,6 +365,7 @@ public class GuiClass {
         exit.addActionListener(e -> {
             pauseMenu.dispose();
             mainFrame.dispose();
+            manager.exitGame();
             createMenu();
         });
         exit.setLocation(5, (300-pauseMenu.getInsets().bottom-pauseMenu.getInsets().top)-70);

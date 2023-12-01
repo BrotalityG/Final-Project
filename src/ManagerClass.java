@@ -452,13 +452,17 @@ public class ManagerClass {
         }
     }
 
+    public void exitGame() {
+        bodies = new ArrayList<GenericBody>();
+    }
+
     private void checkStuck(GenericBody body) {
         if (body.getPreviousPos() == null) {
             return;
         }
 
         if (body.getPreviousPos()[0] == body.getPosition()[0] && body.getPreviousPos()[1] == body.getPosition()[1] && (Double.isNaN(body.getVelocity()[0]) || Double.isNaN(body.getVelocity()[1]))) {
-            System.out.println("Body " + body.getClass().getName() + " is stuck! Resetting Velocity...");
+            System.out.println("Body " + body.getClass().getName() + " (ID: " + body.getID() + ") is stuck! Resetting Velocity... Info: [" + body.getVelocity()[0] + ", " + body.getVelocity()[1] + "], [" + body.getPreviousPos()[0] + ", " + body.getPreviousPos()[1] + "], [" + body.getPosition()[0] + ", " + body.getPosition()[1] + "]");
             body.setVelocity(new double[] {0, 0});
         }
     }
@@ -467,8 +471,6 @@ public class ManagerClass {
         for (GenericBody body : bodies) {
             //? If the body is static, skip it.
             if (!body.isStatic()) {
-                checkStuck(body); //? Check if a body is stuck.
-
                 ApplyGravity(body, elapsedTime); //? Apply gravity to a body.
 
                 //? Check gravitational effects of all bodies in existence.
@@ -490,6 +492,7 @@ public class ManagerClass {
             }
 
             checkBounds(body); //? Confirm body is in bounds and fix if not.
+            checkStuck(body); //? Check if a body is stuck.
         }
     }
 }

@@ -111,27 +111,36 @@ public class SphereBody extends GenericBody {
         return new int[][] {new int[] {position[0]-radius, position[1]}, new int[] {position[0], position[1]+radius}, new int[] {position[0]+radius, position[1]}, new int[] {position[0], position[1]-radius}};
     }
 
+    private boolean checkInBounds(int[] bounds) {
+        boolean inBounds = false;
+        int radius = (int) size/2;
+
+        double magnitude = Math.sqrt(Math.pow(bounds[0]-position[0], 2) + Math.pow(bounds[1]-position[1], 2));
+        if (magnitude <= radius) {
+            System.out.println("In bounds of sphere");
+            inBounds = true;
+        }
+
+        return inBounds;
+    }
+
     private boolean isRectCollide(RectBody body) {
         boolean isCollide = false;
         int[] bodyPosition = body.getPosition();
-        double magnitude = Math.sqrt(Math.pow(position[0]-bodyPosition[0], 2) + Math.pow(position[1]-bodyPosition[1], 2));
-
-        if (magnitude <= getSize()/2.00) {
-            isCollide = true;
-        }
+        isCollide = checkInBounds(bodyPosition);
 
         for (int[] bound : body.getEdgeBounds()) {
-            magnitude = Math.sqrt(Math.pow(bound[0]-bodyPosition[0], 2) + Math.pow(bound[1]-bodyPosition[1], 2));
-            if (magnitude <= getSize()/2.00) {
-                isCollide = true;
+            if (isCollide) {
+                break;
             }
+            isCollide = checkInBounds(bound);
         }
 
         for (int[] bound : body.getBounds()) {
-            magnitude = Math.sqrt(Math.pow(bound[0]-bodyPosition[0], 2) + Math.pow(bound[1]-bodyPosition[1], 2));
-            if (magnitude <= getSize()/2.00) {
-                isCollide = true;
+            if (isCollide) {
+                break;
             }
+            isCollide = checkInBounds(bound);
         }
 
         return isCollide;

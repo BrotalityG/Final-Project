@@ -112,7 +112,8 @@ public class RectBody extends GenericBody {
     private boolean checkInBounds(int[] bounds) {
         boolean inBounds = false;
 
-        if (bounds[0] >= getBounds()[0][0] && bounds[0] <= getBounds()[2][0] && bounds[1] >= getBounds()[0][1] && bounds[1] <= getBounds()[2][1]) {
+        if (bounds[0] <= getBounds()[0][0] && bounds[1] <= getBounds()[0][1] && bounds[0] >= getBounds()[2][0] && bounds[1] >= getBounds()[2][1]) {
+            System.out.println("IN BOUNDS OF RECT");
             inBounds = true;
         }
 
@@ -124,7 +125,7 @@ public class RectBody extends GenericBody {
         int[][] bounds = body.getBounds();
 
         for (int[] bound : bounds) {
-            if (bound[0] >= getBounds()[0][0] && bound[0] <= getBounds()[2][0] && bound[1] >= getBounds()[0][1] && bound[1] <= getBounds()[2][1]) {
+            if (checkInBounds(bound)) {
                 isCollide = true;
             }
         }
@@ -142,15 +143,17 @@ public class RectBody extends GenericBody {
         }
 
         for (int[] bound : body.getEdgeBounds()) {
-            if (checkInBounds(bound)) {
-                isCollide = true;
+            if (isCollide) {
+                break;
             }
+            isCollide = checkInBounds(bound);
         }
 
         for (int[] bound : getBounds()) {
-            if (checkInBounds(bound)) {
-                isCollide = true;
+            if (isCollide) {
+                break;
             }
+            isCollide = checkInBounds(bound);
         }
 
         return isCollide;
