@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 // import java.nio.file.Files;
@@ -107,6 +108,23 @@ public class FileAccessor {
         return packedBodies;
     }
 
+    private GenericBody unpackBody(String packedBody) {
+        String[] bodyData = packedBody.split("[\s]+");
+        GenericBody body = null;
+
+        if (bodyData[0].equals("RectBody")) {
+            body = new RectBody(Double.parseDouble(bodyData[7]), Integer.parseInt(bodyData[5]), Double.parseDouble(bodyData[6]), new int[] {Integer.parseInt(bodyData[1]), Integer.parseInt(bodyData[2])}, Boolean.parseBoolean(bodyData[11]), Boolean.parseBoolean(bodyData[12]), new Color(Integer.parseInt(bodyData[8]), Integer.parseInt(bodyData[9]), Integer.parseInt(bodyData[10])), Integer.parseInt(bodyData[13]));
+        } else if (bodyData[0].equals("SphereBody")) {
+            body = new SphereBody(Double.parseDouble(bodyData[7]), Integer.parseInt(bodyData[5]), Double.parseDouble(bodyData[6]), new int[] {Integer.parseInt(bodyData[1]), Integer.parseInt(bodyData[2])}, Boolean.parseBoolean(bodyData[11]), Boolean.parseBoolean(bodyData[12]), new Color(Integer.parseInt(bodyData[8]), Integer.parseInt(bodyData[9]), Integer.parseInt(bodyData[10])), Integer.parseInt(bodyData[13]));
+        }
+
+        if (body != null) {
+            body.setVelocity(new double[]{Double.parseDouble(bodyData[3]), Double.parseDouble(bodyData[4])});
+        }
+
+        return body;
+    }
+
     public void saveToFile(String filename, ArrayList<GenericBody> bodies, GuiClass gui, boolean overwrite) {
         if (!overwrite && checkIfSaveExists(filename)) {
             gui.overwriteMenu(filename);
@@ -115,7 +133,6 @@ public class FileAccessor {
 
         String[] packedBodies = packBodies(bodies);
         try (FileWriter write = new FileWriter(new File("Saves", filename + ".DAT"))) {
-            write.write("Bodies " + bodies.size() + "\n");
             for (String body : packedBodies) {
                 write.write(body + "\n");
             }
@@ -140,5 +157,28 @@ public class FileAccessor {
         }
 
         tryWriteSettings(newList);
+    }
+
+    public File[] getAllSaves() {
+        File saves = new File("Saves");
+        File[] saveFiles = saves.listFiles();
+
+        return saveFiles;
+    }
+
+    public ArrayList<GenericBody> loadFromFile(String filename, GuiClass gui) {
+        ArrayList<GenericBody> bodies = new ArrayList<GenericBody>();
+
+        try (FileReader read = new FileReader(new File("Saves", filename))) {
+            BufferedReader reader = new BufferedReader(read);
+            String line;
+            while ((line = reader.readLine()) != null) {
+                bodies.add(unpackBody(line));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return bodies;
     }
 }

@@ -38,18 +38,21 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
 public class GuiClass {
     private GameFrame mainFrame;
+    private  JFrame menu;
     private JFrame pauseMenu;
     private GamePanel panel;
     private Graphics g;
@@ -67,7 +70,7 @@ public class GuiClass {
     public void createMenu() { //? Create menu
         //* Create blank window
         boolean wireframe = (boolean) settings.get(3);
-        JFrame menu = new JFrame("2DPSE Menu");
+        menu = new JFrame("2DPSE Menu");
         JPanel panel1 = new JPanel();
         panel1.setOpaque(true);
         panel1.setLayout(null);
@@ -109,10 +112,13 @@ public class GuiClass {
         panel1.add(start);
 
         //* Load from file
-        JButton loadFromFile = new JButton("Load From File (Currently Not Implemented)");
+        JButton loadFromFile = new JButton("Load From File");
         loadFromFile.addActionListener(e -> {
-            //! Currently not implemented
-            // menu.dispose();
+            FileAccessor files = new FileAccessor();
+
+            File[] saves = files.getAllSaves();
+
+            openLoadMenu(saves);
         });
         loadFromFile.setBounds(tk.getScreenSize().width/2-tk.getScreenSize().width/8, tk.getScreenSize().height/2+tk.getScreenSize().height/16+5, tk.getScreenSize().width/4, tk.getScreenSize().height/8);
         panel1.add(loadFromFile);
@@ -135,6 +141,59 @@ public class GuiClass {
         panel1.add(exit);
         
         menu.setVisible(true);
+    }
+
+    private String[] getStringNames(File[] saves) {
+        String[] names = new String[saves.length];
+
+        for (int i = 0; i < saves.length; i++) {
+            names[i] = saves[i].getName().replace(".DAT", "");
+        }
+
+        return names;
+    }
+
+    private void openLoadMenu(File[] saves) {
+        JFrame loadMenu = new JFrame("Load Menu");
+        JPanel panel = new JPanel();
+        panel.setOpaque(true);
+        panel.setLayout(null);
+        loadMenu.setContentPane(panel);
+
+        loadMenu.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        loadMenu.pack();
+        loadMenu.setSize(300, 300);
+        loadMenu.setLocationRelativeTo(mainFrame);
+
+        loadMenu.setAlwaysOnTop(true);
+
+        int totalFrameSize = 300-(loadMenu.getInsets().left+loadMenu.getInsets().right);
+
+        JList<String> list = new JList<String>(getStringNames(saves));
+        list.setBounds(5, 5, totalFrameSize-10, loadMenu.getHeight()-loadMenu.getInsets().bottom-loadMenu.getInsets().top-80);
+        loadMenu.add(list);
+
+        JButton load = new JButton("Load Selected File");
+        load.addActionListener(e -> {
+            manager.loadFromFile(saves[list.getSelectedIndex()].getName());
+            createWindow((boolean) settings.get(3));
+            loadMenu.dispose();
+            menu.dispose();
+        });
+        load.setLocation(5, loadMenu.getHeight()-loadMenu.getInsets().bottom-loadMenu.getInsets().top-70);
+        load.setSize(totalFrameSize-10, 30);
+        loadMenu.add(load);
+
+        JButton exit = new JButton("Exit");
+        exit.addActionListener(e -> {
+            loadMenu.dispose();
+        });
+        exit.setLocation(5, loadMenu.getHeight()-loadMenu.getInsets().bottom-loadMenu.getInsets().top-35);
+        exit.setSize(totalFrameSize-10, 30);
+        loadMenu.add(exit);
+
+        loadMenu.setVisible(true);
     }
 
     private void createWindow(boolean wireframe) { //? Create window
@@ -385,7 +444,7 @@ public class GuiClass {
         subtitle.setBorder(null);
         panel1.add(subtitle);
 
-        //* Selection Box
+        //* Toggle Subheading
         JTextField selection = new JTextField("Toggleable Settings:");
         selection.setEditable(false);
         selection.setBorder(null);
@@ -397,25 +456,25 @@ public class GuiClass {
         //* Earth Gravity
         JCheckBox earthGravity = new JCheckBox("Use Earth Gravity");
         earthGravity.setSelected((boolean) settings.get(0));
-        earthGravity.setBounds(tk.getScreenSize().width/2-tk.getScreenSize().width/10, tk.getScreenSize().height/2-tk.getScreenSize().height/8, tk.getScreenSize().width/16, tk.getScreenSize().height/64);
+        earthGravity.setBounds(tk.getScreenSize().width/2-tk.getScreenSize().width/10, tk.getScreenSize().height/2-tk.getScreenSize().height/8, tk.getScreenSize().width/8, tk.getScreenSize().height/64);
         panel1.add(earthGravity);
 
         //* Particle Gravity
         JCheckBox particleGravity = new JCheckBox("Use Particle Gravity");
         particleGravity.setSelected((boolean) settings.get(1));
-        particleGravity.setBounds(tk.getScreenSize().width/2-tk.getScreenSize().width/10, tk.getScreenSize().height/2-tk.getScreenSize().height/8+tk.getScreenSize().height/24, tk.getScreenSize().width/16, tk.getScreenSize().height/64);
+        particleGravity.setBounds(tk.getScreenSize().width/2-tk.getScreenSize().width/10, tk.getScreenSize().height/2-tk.getScreenSize().height/8+tk.getScreenSize().height/24, tk.getScreenSize().width/8, tk.getScreenSize().height/64);
         panel1.add(particleGravity);
 
         //* Wireframe Rendering
         JCheckBox wireframe = new JCheckBox("Wireframe Rendering");
         wireframe.setSelected((boolean) settings.get(3));
-        wireframe.setBounds(tk.getScreenSize().width/2+tk.getScreenSize().width/20, tk.getScreenSize().height/2-tk.getScreenSize().height/8, tk.getScreenSize().width/16, tk.getScreenSize().height/64);
+        wireframe.setBounds(tk.getScreenSize().width/2+tk.getScreenSize().width/20, tk.getScreenSize().height/2-tk.getScreenSize().height/8, tk.getScreenSize().width/8, tk.getScreenSize().height/64);
         panel1.add(wireframe);
 
         //* Debug Mode
         JCheckBox debugMode = new JCheckBox("Debug Mode");
         debugMode.setSelected((boolean) settings.get(4));
-        debugMode.setBounds(tk.getScreenSize().width/2+tk.getScreenSize().width/20, tk.getScreenSize().height/2-tk.getScreenSize().height/8+tk.getScreenSize().height/24, tk.getScreenSize().width/16, tk.getScreenSize().height/64);
+        debugMode.setBounds(tk.getScreenSize().width/2+tk.getScreenSize().width/20, tk.getScreenSize().height/2-tk.getScreenSize().height/8+tk.getScreenSize().height/24, tk.getScreenSize().width/8, tk.getScreenSize().height/64);
         panel1.add(debugMode);
 
         //* Exaggeration Factor

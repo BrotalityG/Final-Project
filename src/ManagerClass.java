@@ -113,6 +113,11 @@ public class ManagerClass {
         timer.scheduleAtFixedRate(new TimerTask(){
             public void run() {
                 //! Get elasped time since last frame and reset timer.
+
+                if (gui.getFrame() == null) {
+                    return;
+                }
+
                 long elapsed = Duration.between(lastUpdate, Instant.now()).toMillis();
                 lastUpdate = Instant.now();
 
@@ -191,6 +196,10 @@ public class ManagerClass {
 
     public void saveToFile(String filename, boolean overwrite) {
         files.saveToFile(filename, bodies, gui, overwrite);
+    }
+
+    public void loadFromFile(String filename) {
+        bodies = files.loadFromFile(filename, gui);
     }
 
     private boolean checkToApply(GenericBody body1, GenericBody body2) {
