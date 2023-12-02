@@ -1,3 +1,33 @@
+/*********************************************************
+ * Filename: FileAccessor
+ * Author: Branden Stahl
+ * Created: 11/30/23
+ * Modified: 12/01/23
+ * 
+ * Purpose: 
+ * File accessor for the program, handles all file I/O.
+ * 
+ * Attributes:
+ *      -constants: ArrayList<Object>
+ *      -settings: ArrayList<Object>
+ *
+ * 
+ * Methods (in Order): 
+ * 		+getConstants(): ArrayList<Object>
+ *      -parseConstants(): void
+ *      +getSettings(): ArrayList<Object>
+ *      -parseSettings(): void
+ *      -tryWriteSettings(ArrayList<String>): void
+ *      -checkIfSaveExists(String): boolean
+ *      -packBodies(ArrayList<GenericBody>): String[]
+ *      -unpackBody(String): GenericBody
+ *      +saveToFile(String, ArrayList<GenericBody>, GuiClass, boolean): void
+ *      +writeSettings(ArrayList<Object>): void
+ *      +getAllSaves(): File[]
+ *      +loadFromFile(String, GuiClass): ArrayList<GenericBody>
+ *
+ */
+
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
