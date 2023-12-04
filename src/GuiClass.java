@@ -176,10 +176,10 @@ public class GuiClass {
 
         JButton load = new JButton("Load Selected File");
         load.addActionListener(e -> {
-            manager.loadFromFile(saves[list.getSelectedIndex()].getName());
             createWindow((boolean) settings.get(3));
             loadMenu.dispose();
             menu.dispose();
+            manager.loadFromFile(saves[list.getSelectedIndex()].getName());
         });
         load.setLocation(5, loadMenu.getHeight()-loadMenu.getInsets().bottom-loadMenu.getInsets().top-70);
         load.setSize(totalFrameSize-10, 30);
