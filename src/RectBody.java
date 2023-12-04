@@ -17,31 +17,21 @@
  * 		-canCollide: boolean
  * 		-isStatic: boolean
  * 		-prevPos: int[]
+ * 		-excludeBodies: ArrayList<GenericBody>
+ * 		-ID: int
  *  
  * Methods: 
- *      +RectBody<double, int, double, int[], boolean, boolean, Color>
+ *      +RectBody<double, int, double, int[], boolean, boolean, Color, int>
  * 		+move(int[]): void
- * 	    +getPosition(): int[]
- * 	    +getVelocity(): double[]
- * 	    +setVelocity(double[]): void
  * 	    +getBounds(): int[][]
  * 	    +getEdgeBounds(): int[][]
- *      -checkInBounds(int[]): boolean
- *      -isRectCollide(RectBody): boolean
- *      -isSphereCollide(SphereBody): boolean
+ * 	    -checkInBounds(int[]): boolean
+ * 	    -isRectCollide(RectBody): boolean
+ * 	    -isSphereCollide(SphereBody): boolean
  * 	    +isTouching(GenericBody): boolean
  * 	    +getCollidingBodies(ArrayList<GenericBody>): ArrayList<GenericBody>
- * 	    +getSize(): int
- * 	    +getElasticity(): double
- * 	    +getMass(): double
- * 	    +getColor(): Color
- * 	    +canCollide(): boolean
- * 	    +isStatic(): boolean
  * 	    +setPreviousPos(): void
- * 	    +getPreviousPos(): int[]
  * 	    +setExcludeBody(GenericBody): void
- * 	    +getExcludedBodies(): ArrayList<GenericBody>
- * 	    +getID(): int
  *
  */
 

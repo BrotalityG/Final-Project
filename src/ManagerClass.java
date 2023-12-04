@@ -2,7 +2,7 @@
  * Filename: ManagerClass
  * Author: Branden Stahl
  * Created: 10/09/23
- * Modified: 11/27/23
+ * Modified: 12/01/23
  * 
  * Purpose: 
  * Main Manager class, handles all physics, timing, and controls of the simulation.
@@ -16,15 +16,19 @@
  * 		-settings: ArrayList<Object>
  * 		-timer: Timer
  * 		-lastUpdate: Instant
+ * 		-running: boolean
  * 
  * Methods: 
  * 		+main(String[]): void
  * 		-readData(): void
  * 		+startRender(): void
  * 		+stopRender(): void
- * 		+generateNewID(): int
+ * 		-generateNewID(): int
  * 		+createBody(int, double, int, double, int[], boolean, boolean): void
  * 		+onMouseClick(MouseEvent): void
+ * 		+onKeyPress(KeyEvent): void
+ * 		+saveToFile(String, boolean): void
+ * 		+loadFromFile(String): void
  * 		-checkToApply(GenericBody, GenericBody): boolean
  * 		-Apply2BodyGravity(GenericBody, GenericBody, double): void
  * 		-ApplyGravity(GenericBody, double): void

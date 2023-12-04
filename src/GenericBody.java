@@ -11,25 +11,16 @@
  * 		
  *  
  * Methods: 
- * 		+move(int[] position): void
+ * 		+move(int[]): void
  * 	    +getPosition(): int[]
  * 	    +getVelocity(): double[]
- * 	    +setVelocity(double[] velocity): void
+ * 	    +setVelocity(double[]): void
  * 	    +getBounds(): int[][]
  * 	    +getEdgeBounds(): int[][]
- * 	    +isTouching(GenericBody body): boolean
- * 	    +getCollidingBodies(ArrayList<GenericBody> bodies): ArrayList<GenericBody>
- * 	    +getSize(): int
- * 	    +getElasticity(): double
- * 	    +getMass(): double
- * 	    +getColor(): Color
- * 	    +canCollide(): boolean
- * 	    +isStatic(): boolean
+ * 	    +isTouching(GenericBody): boolean
+ * 	    +getCollidingBodies(ArrayList<GenericBody>): ArrayList<GenericBody>
  * 	    +setPreviousPos(): void
- * 	    +getPreviousPos(): int[]
- * 	    +setExcludeBody(GenericBody body): void
- * 	    +getExcludedBodies(): ArrayList<GenericBody>
- * 	    +getID(): int
+ * 	    +setExcludeBody(GenericBody): void
  *
  */
 

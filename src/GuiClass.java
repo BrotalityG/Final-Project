@@ -9,23 +9,31 @@
  * 
  * Attributes:
  *      -mainFrame: GameFrame
+ *      -menu: JFrame
+ *      -pauseMenu: JFrame
  *      -panel: GamePanel
  *      -g: Graphics
  *      -manager: ManagerClass
  *      -settings: ArrayList<Object>
  *      -insets: Insets
+ *      -paused: boolean
+ *      -inSaveMenu: boolean
  *
  * 
  * Methods: 
  * 		+GuiClass<ManagerClass, ArrayList<Object>>
  *      +createMenu(): void
- *      +createWindow(boolean): void
+ *      -getStringNames(File[]): String[]
+ *      -openLoadMenu(File[]): void
+ *      -createWindow(boolean): void
+ *      +overwriteMenu(String): void
+ *      -saveMenu(): void
+ *      +openPauseMenu(): void
+ *      -setEF(String): boolean
+ *      -openSettings(): void
  *      +openSpawnMenu(MouseEvent): void
- *      +render(ArrayList<GenericBody>, int): void
- *      +getInsets(): Insets
- *      +getFrame(): GameFrame
- *      +getPanel(): GamePanel
- * 
+ *      +render(ArrayList<GenericBody>): void
+ *
  */
 
  //* Do note that this file is never going to meet the line limit per method simply due to how swing
@@ -52,7 +60,7 @@ import javax.swing.text.JTextComponent;
 
 public class GuiClass {
     private GameFrame mainFrame;
-    private  JFrame menu;
+    private JFrame menu;
     private JFrame pauseMenu;
     private GamePanel panel;
     private Graphics g;
