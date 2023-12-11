@@ -2,7 +2,7 @@
  * Filename: RectBody
  * Author: Branden Stahl
  * Created: 10/09/23
- * Modified: 11/27/23
+ * Modified: 12/11/23
  * 
  * Purpose: 
  * Each instance of this class represents a rectangular body.
@@ -25,7 +25,7 @@
  * 		+move(int[]): void
  * 	    +getBounds(): int[][]
  * 	    +getEdgeBounds(): int[][]
- * 	    -checkInBounds(int[]): boolean
+ * 	    +checkInBounds(int[]): boolean
  * 	    -isRectCollide(RectBody): boolean
  * 	    -isSphereCollide(SphereBody): boolean
  * 	    +isTouching(GenericBody): boolean
@@ -99,11 +99,11 @@ public class RectBody extends GenericBody {
         return new int[][] {new int[] {position[0]-radius, position[1]}, new int[] {position[0], position[1]+radius}, new int[] {position[0]+radius, position[1]}, new int[] {position[0], position[1]-radius}};
     }
 
-    private boolean checkInBounds(int[] bounds) {
+    @Override
+    public boolean checkInBounds(int[] bounds) {
         boolean inBounds = false;
 
         if (bounds[0] <= getBounds()[0][0] && bounds[1] <= getBounds()[0][1] && bounds[0] >= getBounds()[2][0] && bounds[1] >= getBounds()[2][1]) {
-            System.out.println("IN BOUNDS OF RECT");
             inBounds = true;
         }
 
