@@ -2,7 +2,7 @@
  * Filename: SphereBody
  * Author: Branden Stahl
  * Created: 10/09/23
- * Modified: 11/27/23
+ * Modified: 12/11/23
  * 
  * Purpose: 
  * Each instance of this class represents a circular body.
@@ -25,7 +25,7 @@
  * 		+move(int[]): void
  * 	    +getBounds(): int[][]
  * 	    +getEdgeBounds(): int[][]
- * 	    -checkInBounds(int[]): boolean
+ * 	    +checkInBounds(int[]): boolean
  * 	    -isRectCollide(RectBody): boolean
  * 	    -isSphereCollide(SphereBody): boolean
  * 	    +isTouching(GenericBody): boolean
@@ -102,13 +102,13 @@ public class SphereBody extends GenericBody {
         return new int[][] {new int[] {position[0]-radius, position[1]}, new int[] {position[0], position[1]+radius}, new int[] {position[0]+radius, position[1]}, new int[] {position[0], position[1]-radius}};
     }
 
-    private boolean checkInBounds(int[] bounds) {
+    @Override
+    public boolean checkInBounds(int[] bounds) {
         boolean inBounds = false;
         int radius = (int) size/2;
 
         double magnitude = Math.sqrt(Math.pow(bounds[0]-position[0], 2) + Math.pow(bounds[1]-position[1], 2));
         if (magnitude <= radius) {
-            System.out.println("In bounds of sphere");
             inBounds = true;
         }
 

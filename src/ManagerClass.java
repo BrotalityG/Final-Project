@@ -2,7 +2,7 @@
  * Filename: ManagerClass
  * Author: Branden Stahl
  * Created: 10/09/23
- * Modified: 12/01/23
+ * Modified: 12/11/23
  * 
  * Purpose: 
  * Main Manager class, handles all physics, timing, and controls of the simulation.
@@ -169,17 +169,36 @@ public class ManagerClass {
     }
 
     public void onMouseClick(MouseEvent e) {
-        switch (e.getButton()) {
-            case MouseEvent.BUTTON1: //! Left Click
-                //? This will only move the body if it's being dragged on.
-            
-                break;
-            case MouseEvent.BUTTON3: //! Right Click
-                //? Open menu to spawn new body at mouse position.
+        if (e.getButton() == MouseEvent.BUTTON3) { //! Right Click
+            //? Open menu to spawn new body at mouse position.
+            GenericBody body = clickingBody(e);
 
+            if (body == null) {
                 gui.openSpawnMenu(e);
-                break;
+            } else {
+                bodies.remove(body);
+            }
         }
+    }
+
+    public void onMouseDrag(int[] start, int[] end, int ms, GenericBody body, int[] pos, int[] offset) {
+        //? Drag a body to a new position and apply the velocity of the drag.
+        if (body != null) {
+            body.move(new int[] {end[0]+(offset[0]), end[1]+(offset[1])});
+            body.setVelocity(new double[] {((end[0]-start[0])/((double) ms/1000.00)), ((end[1]-start[1])/((double) ms/1000.00))});
+        }
+    }
+
+    public GenericBody clickingBody(MouseEvent e) {
+        int[] bounds = new int[] {e.getX(), e.getY()};
+
+        for (GenericBody body : bodies) {
+            if (body.checkInBounds(bounds)) {
+                return body;
+            }
+        }
+
+        return null;
     }
 
     public void onKeyPress(KeyEvent e) {

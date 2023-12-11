@@ -2,7 +2,7 @@
  * Filename: GenericBody
  * Author: Branden Stahl
  * Created: 10/09/23
- * Modified: 11/27/23
+ * Modified: 12/11/23
  * 
  * Purpose: 
  * This is the abstract class representing all bodies.
@@ -39,6 +39,8 @@ public abstract class GenericBody {
     public abstract int[][] getBounds();
 
     public abstract int[][] getEdgeBounds();
+
+    public abstract boolean checkInBounds(int[] bounds);
 
     public abstract boolean isTouching(GenericBody body);
 
