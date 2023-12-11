@@ -26,6 +26,8 @@
  * 		-generateNewID(): int
  * 		+createBody(int, double, int, double, int[], boolean, boolean): void
  * 		+onMouseClick(MouseEvent): void
+ * 		+onMouseDrag(int[], int[], int, GenericBody, int[], int[]): void
+ * 		+clickingBody(MouseEvent): GenericBody
  * 		+onKeyPress(KeyEvent): void
  * 		+saveToFile(String, boolean): void
  * 		+loadFromFile(String): void
